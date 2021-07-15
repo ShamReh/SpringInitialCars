@@ -10,6 +10,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultMatcher;
@@ -19,6 +21,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT) // try random ports until it finds a free one
 @AutoConfigureMockMvc
+//executes schema then data before the tests
+@Sql(scripts = { "classpath:cars-schema.sql",
+		"classpath:cars-data.sql" }, executionPhase = ExecutionPhase.BEFORE_TEST_METHOD)
 public class CarsControllerIntegrationTest {
 
 	@Autowired // tells Spring to inject the MockMVC object into this class
@@ -29,7 +34,7 @@ public class CarsControllerIntegrationTest {
 
 	@Test
 	void testCreate() throws Exception {
-		Cars testKit = new Cars("BMW", "M4", 2019);
+		Cars testKit = new Cars("Ferrari", "488 Spider", 2019);
 		// convert to json
 		String testKitAsJSON = this.mapper.writeValueAsString(testKit);
 
@@ -43,8 +48,8 @@ public class CarsControllerIntegrationTest {
 
 		ResultMatcher checkStatus = status().isCreated();
 
-		Cars testCreatedKit = new Cars("BMW", "M4", 2019);
-		testCreatedKit.setId(1); // due to the AUTO_INCREMENT
+		Cars testCreatedKit = new Cars("Ferrari", "488 Spider", 2019);
+		testCreatedKit.setId(2); // due to the AUTO_INCREMENT
 		String testCreatedKitAsJSON = this.mapper.writeValueAsString(testCreatedKit);
 
 		ResultMatcher checkBody = content().json(testCreatedKitAsJSON);
