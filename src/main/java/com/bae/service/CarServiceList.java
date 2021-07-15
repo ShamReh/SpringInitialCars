@@ -3,22 +3,26 @@ package com.bae.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Service;
-
 import com.bae.data.Cars;
 
-@Service
-@Primary // Tells Spring to make this one
+//@Service
+//@Primary // Tells Spring to make this one
 
 public class CarServiceList implements CarService {
 
 	public List<Cars> cars = new ArrayList<>();
 
 	@Override
-	public void createCar(Cars car1) {
+	public List<Cars> getByBrand(String name) {
+
+		return null;
+	}
+
+	@Override
+	public Cars createCar(Cars car1) {
 		System.out.println(car1);
 		this.cars.add(car1);
+		return this.cars.get(this.cars.size() - 1);
 	}
 
 	@Override

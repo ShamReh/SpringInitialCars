@@ -6,7 +6,7 @@ import com.bae.data.Cars;
 
 public interface CarService {
 
-	public void createCar(Cars car1);
+	public Cars createCar(Cars car1);
 
 	List<Cars> getCar1();
 
@@ -15,5 +15,7 @@ public interface CarService {
 	public String deleteCar(int id);
 
 	public Cars replaceCar(Cars newcar, int id);
+
+	List<Cars> getByBrand(String name);
 
 }

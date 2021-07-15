@@ -2,6 +2,8 @@ package com.bae.carscontroller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,10 +33,11 @@ public class CarsController {
 //	}
 
 	@PostMapping("/createCar") // fancy
-	public void createCar(@RequestBody Cars car1) { // less fancy
+	public ResponseEntity<Cars> createCar(@RequestBody Cars car1) { // less fancy
 		// just Java
 		System.out.println(car1);
-		this.service.createCar(car1);
+		Cars created = this.service.createCar(car1);
+		return new ResponseEntity<>(created, HttpStatus.CREATED);
 	}
 
 //	@DeleteMapping("/deleteCars/{id}")
@@ -78,6 +81,11 @@ public class CarsController {
 	public Cars replaceCar(@RequestBody Cars newcar, @PathVariable int id) {
 		return this.service.replaceCar(newcar, id);
 
+	}
+
+	@GetMapping("/getByBrand/{name}")
+	public List<Cars> getByName(@PathVariable String name) {
+		return this.service.getByBrand(name);
 	}
 
 }
