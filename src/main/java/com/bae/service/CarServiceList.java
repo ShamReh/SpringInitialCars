@@ -26,7 +26,7 @@ public class CarServiceList implements CarService {
 	}
 
 	@Override
-	public List<Cars> getCar1() {
+	public List<Cars> getAllCars() {
 		return this.cars;
 	}
 

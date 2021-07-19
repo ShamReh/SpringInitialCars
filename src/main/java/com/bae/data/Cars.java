@@ -15,6 +15,14 @@ public class Cars {
 	private String model;
 	private int age;
 
+	public Cars(int id, String brand, String model, int age) {
+		super();
+		this.id = id;
+		this.brand = brand;
+		this.model = model;
+		this.age = age;
+	}
+
 	public Cars(String brand, String model, int age) {
 		super();
 		this.brand = brand;

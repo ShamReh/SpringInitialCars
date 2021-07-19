@@ -26,13 +26,13 @@ public class CarServiceDB implements CarService {
 	}
 
 	@Override
-	public List<Cars> getCar1() {
+	public List<Cars> getAllCars() {
 		return this.repo.findAll();
 	}
 
 	@Override
 	public Cars getCar(int id) {
-		return this.repo.getById(id);
+		return this.repo.findById(id).get();
 	}
 
 	@Override

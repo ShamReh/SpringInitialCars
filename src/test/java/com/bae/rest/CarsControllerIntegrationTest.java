@@ -1,8 +1,14 @@
 package com.bae.rest;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +40,7 @@ public class CarsControllerIntegrationTest {
 
 	@Test
 	void testCreate() throws Exception {
+		// Creating body as this will be tested
 		Cars testKit = new Cars("Ferrari", "488 Spider", 2019);
 		// convert to json
 		String testKitAsJSON = this.mapper.writeValueAsString(testKit);
@@ -49,12 +56,115 @@ public class CarsControllerIntegrationTest {
 		ResultMatcher checkStatus = status().isCreated();
 
 		Cars testCreatedKit = new Cars("Ferrari", "488 Spider", 2019);
-		testCreatedKit.setId(2); // due to the AUTO_INCREMENT
+		testCreatedKit.setId(4); // due to the AUTO_INCREMENT
 		String testCreatedKitAsJSON = this.mapper.writeValueAsString(testCreatedKit);
 
 		ResultMatcher checkBody = content().json(testCreatedKitAsJSON);
 		// SEND request and check status + body
 		this.mockMVC.perform(request).andExpect(checkStatus).andExpect(checkBody);
+	}
+
+	@Test
+	void testDelete() throws Exception {
+		// create request
+		RequestBuilder request = delete("/deleteCar/1");
+
+		// check response
+		ResultMatcher checkStatus = status().isNoContent();
+		ResultMatcher checkBody = content().string("Deleted: 1");
+
+		// Send Request and check status + body
+		this.mockMVC.perform(request).andExpect(checkStatus).andExpect(checkBody);
+	}
+
+	@Test
+	void testGetAll() throws Exception {
+
+		List<Cars> carsList = new ArrayList<>();
+		Cars found0 = new Cars(1, "BMW", "M4", 2019);
+		Cars found = new Cars(2, "Ferrari", "458", 2020);
+		Cars foundTwo = new Cars(3, "McLaren", "650S", 2016);
+		carsList.add(found0);
+		carsList.add(found);
+		carsList.add(foundTwo);
+		String listAsJSON = this.mapper.writeValueAsString(carsList);
+
+		// create request
+		RequestBuilder request = get("/getAllCars");
+
+		// check response
+
+		ResultMatcher checkStatus = status().isOk();
+		ResultMatcher checkBody = content().json(listAsJSON);
+
+		this.mockMVC.perform(request).andExpect(checkStatus).andExpect(checkBody);
+
+	}
+
+	@Test
+	void testGetCarById() throws Exception {
+
+		Cars get = new Cars(1, "BMW", "M4", 2019);
+		String getAsJSON = this.mapper.writeValueAsString(get);
+
+		// create request
+		RequestBuilder request = get("/getSpecificCar/1");
+
+		// check response
+		ResultMatcher checkStatus = status().isOk();
+
+		ResultMatcher checkBody = content().json(getAsJSON);
+
+		this.mockMVC.perform(request).andExpect(checkStatus).andExpect(checkBody);
+
+		// alternative method
+		// MvcResult
+		// result=this.mockMVC.perform(req).andExpect(checkStatus).andReturn();
+		// String responseBod = result.getResponse ().getContentAsString();
+		// Cars resultCars = this.mapper.readValue(responseBody, Cars.class);
+		// assertThat(get).isEqualTo(resultCars);
+	}
+
+	@Test
+	void testUpdate() throws Exception {
+		// Creating body
+		Cars testCar = new Cars(1, "Ferrari", "488 Spider", 2019);
+
+		// convert to json
+		String testCarAsJSON = this.mapper.writeValueAsString(testCar);
+
+		// create request
+		RequestBuilder request = put("/replaceCar/1").contentType(MediaType.APPLICATION_JSON).content(testCarAsJSON);
+
+		// check response body and status
+
+		ResultMatcher checkStatus = status().isAccepted();
+		ResultMatcher checkBody = content().json(testCarAsJSON);
+
+		this.mockMVC.perform(request).andExpect(checkStatus).andExpect(checkBody);
+	}
+
+	@Test
+	void testgetByBrand() throws Exception {
+
+		List<Cars> carsList = new ArrayList<>();
+		Cars found0 = new Cars(1, "BMW", "M4", 2019);
+
+		carsList.add(found0);
+
+		String listAsJSON = this.mapper.writeValueAsString(carsList);
+
+		// create request
+		RequestBuilder request = get("/getByBrand/BMW");
+
+		// check response
+		ResultMatcher checkStatus = status().isAccepted();
+
+		ResultMatcher checkBody = content().json(listAsJSON);
+
+		// check response
+		this.mockMVC.perform(request).andExpect(checkStatus).andExpect(checkBody);
+
 	}
 
 }

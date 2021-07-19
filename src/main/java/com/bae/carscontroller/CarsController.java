@@ -51,14 +51,16 @@ public class CarsController {
 //	}
 
 	// Gets all cars
-	@GetMapping("/getCar1")
-	List<Cars> getCar1() {
-		return this.service.getCar1();
+	@GetMapping("/getAllCars")
+	public ResponseEntity<List<Cars>> getAllCars() {
+		List<Cars> body = this.service.getAllCars();
+		return new ResponseEntity<List<Cars>>(body, HttpStatus.OK);
 	}
 
 	@GetMapping("/getSpecificCar/{id}")
-	public Cars getCar(@PathVariable int id) {
-		return this.service.getCar(id);
+	public ResponseEntity<Cars> getCar(@PathVariable int id) {
+		Cars body = this.service.getCar(id);
+		return new ResponseEntity<Cars>(body, HttpStatus.OK);
 	}
 
 //	@DeleteMapping("/deleteCar/{id}")
@@ -72,20 +74,23 @@ public class CarsController {
 //	}
 
 	@DeleteMapping("/deleteCar/{id}")
-	public String deleteCar(@PathVariable int id) {
-		return this.service.deleteCar(id);
+	public ResponseEntity<String> deleteCar(@PathVariable int id) {
+		String body = this.service.deleteCar(id);
+		return new ResponseEntity<String>(body, HttpStatus.NO_CONTENT);
 
 	}
 
 	@PutMapping("/replaceCar/{id}")
-	public Cars replaceCar(@RequestBody Cars newcar, @PathVariable int id) {
-		return this.service.replaceCar(newcar, id);
+	public ResponseEntity<Cars> replaceCar(@RequestBody Cars newcar, @PathVariable int id) {
+		Cars body = this.service.replaceCar(newcar, id);
+		return new ResponseEntity<Cars>(body, HttpStatus.ACCEPTED);
 
 	}
 
 	@GetMapping("/getByBrand/{name}")
-	public List<Cars> getByName(@PathVariable String name) {
-		return this.service.getByBrand(name);
+	public ResponseEntity<List<Cars>> getByName(@PathVariable String name) {
+		List<Cars> body = this.service.getByBrand(name);
+		return new ResponseEntity<List<Cars>>(body, HttpStatus.ACCEPTED);
 	}
 
 }

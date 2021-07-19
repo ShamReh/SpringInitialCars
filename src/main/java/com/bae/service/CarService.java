@@ -8,7 +8,7 @@ public interface CarService {
 
 	public Cars createCar(Cars car1);
 
-	List<Cars> getCar1();
+	List<Cars> getAllCars();
 
 	public Cars getCar(int id);
 
