@@ -1,5 +1,7 @@
 package com.bae.data;
 
+import java.util.Objects;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,6 +30,24 @@ public class Cars {
 		this.brand = brand;
 		this.model = model;
 		this.age = age;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(age, brand, id, model);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Cars other = (Cars) obj;
+		return age == other.age && Objects.equals(brand, other.brand) && id == other.id
+				&& Objects.equals(model, other.model);
 	}
 
 	public Cars() { // Required (Blank Constructor)
